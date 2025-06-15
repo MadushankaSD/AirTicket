@@ -20,13 +20,17 @@
             <a href="${pageContext.request.contextPath}/manager-dashboard">Manager Dashboard</a>
             <% } %>
 
+            <% if ("USER".equals(user.getRole())) { %>
+            <a href="${pageContext.request.contextPath}/user-dashboard">Reservation</a>
+            <% } %>
+
             <span style="margin-right: 40px; margin-left: 20px">Welcome, <%= user.getName() %></span>
-            <a href="#" onclick="logout(event)" style="color: white; text-decoration: none;">Logout</a>
+            <a href="#" onclick="logout(event)" style="color: #ed856d; text-decoration: none;">Logout</a>
 
             <%
             } else {
             %>
-            <a href="#" onclick="openLoginModal(event)" style="color: white; text-decoration: none;">Login</a>
+            <a href="#" onclick="openLoginModal(event)" style="color: #ed856d; text-decoration: none; ">Login</a>
             <%
                 }
             %>

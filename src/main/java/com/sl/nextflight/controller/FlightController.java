@@ -29,8 +29,6 @@ public class FlightController {
 //            @RequestParam(defaultValue = "1") int passengers,
             Model model) {
 
-        // Here you should call your service or DB to get flights based on search criteria.
-        // For demo, we'll just return dummy data.
 
         List<Flight> flights = flightsService.getAvailableFlights();
 
@@ -41,7 +39,7 @@ public class FlightController {
 //        model.addAttribute("returnDate", returnDate);
 //        model.addAttribute("passengers", passengers);
 
-        return "flightResults"; // your JSP page showing results
+        return "flight-results";
     }
 
 }

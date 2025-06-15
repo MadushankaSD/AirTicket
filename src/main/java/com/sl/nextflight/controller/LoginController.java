@@ -4,17 +4,22 @@ import com.sl.nextflight.model.User;
 import com.sl.nextflight.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 public class LoginController {
 
     private final AuthService authService;
+    private final Map<String, String> tokenStore = new ConcurrentHashMap<>();
+
 
     public LoginController(AuthService authService) {
         this.authService = authService;
@@ -53,8 +58,13 @@ public class LoginController {
         boolean isValid = authService.validate(username, password);
 
         if (isValid) {
+            String token = UUID.randomUUID().toString();
+            tokenStore.put(token, username);
+            session.setAttribute("authToken", token); // Store in session
             User user = new User();
-            user.setRole("ADMIN");
+            user.setRole("MANAGER");
+//            user.setRole("USER");
+//            user.setRole("ADMIN");
             user.setUsername(username);
             user.setName("Madushanka");
 
@@ -95,5 +105,10 @@ public class LoginController {
         }
 
         return response;
+    }
+
+    public boolean isValidToken(HttpSession session) {
+        String token = (String) session.getAttribute("authToken");
+        return token != null && tokenStore.containsKey(token);
     }
 }

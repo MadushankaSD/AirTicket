@@ -66,15 +66,9 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>Admin Dashboard</h1>
-    <div class="logout">
-        <span>Welcome, <%= user.getName() %></span>
-        |
-        <a href="<%= request.getContextPath() %>/logout" style="color: #ed856d;">Logout</a>
-    </div>
-</header>
 
+<jsp:include page="header.jsp" />
+<h1>Admin Dashboard</h1>
 <div class="container">
     <div class="grid">
         <div class="card">

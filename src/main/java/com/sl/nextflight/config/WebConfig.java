@@ -1,5 +1,7 @@
 package com.sl.nextflight.config;
 
+import com.sl.nextflight.controller.LoginController;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -24,5 +26,13 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/resources/**")
                 .addResourceLocations("/resources/");
+    }
+
+    @Bean
+    public FilterRegistrationBean<TokenAuthFilter> authFilter(TokenAuthFilter tokenAuthFilter) {
+        FilterRegistrationBean<TokenAuthFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(tokenAuthFilter);
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
     }
 }

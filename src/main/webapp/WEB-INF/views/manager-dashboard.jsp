@@ -66,24 +66,23 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>Manager Dashboard</h1>
-    <div class="logout">
-        <span>Welcome, <%= user.getName() %></span>
-        |
-        <a href="<%= request.getContextPath() %>/logout" style="color: #ed856d;">Logout</a>
-    </div>
-</header>
 
+<jsp:include page="header.jsp" />
+<h1>Manager Dashboard</h1>
 <div class="container">
     <div class="grid">
+        <div class="card">
+            <h3>Create Booking</h3>
+            <p>Create booking for customer.</p>
+            <a href="<%= request.getContextPath() %>/manager/booking">Book</a>
+        </div>
         <div class="card">
             <h3>Flight Schedule</h3>
             <p>Monitor all scheduled flights and routes.</p>
             <a href="<%= request.getContextPath() %>/manager/flights">View</a>
         </div>
         <div class="card">
-            <h3>Crew Assignments</h3>
+            <h3>Manage Airplane</h3>
             <p>Check and manage assigned flight crews.</p>
             <a href="<%= request.getContextPath() %>/manager/crew">Manage</a>
         </div>
