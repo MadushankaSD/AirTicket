@@ -1,49 +1,53 @@
 package com.sl.nextflight.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.sl.nextflight.model.FlightClass;
+import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
+
+@Entity
+@Table(name = "flights")
 public class Flight {
-    private String id;
-    private String airline;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String flightNumber;
-    private Date departureTime;
-    private Date arrivalTime;
-    private String departureAirport;
-    private String arrivalAirport;
-    private String duration; // e.g. "3h 25m"
-    private double price;
 
-    public Flight(String f001, String deltaAirlines, String dl123, java.util.Date dep1, java.util.Date arr1, String jfk, String lax, String s, double v) {
-        this.id = f001;
-        this.airline = deltaAirlines;
-        this.flightNumber = dl123;
-        this.departureTime = new Date(dep1.getTime());
-        this.arrivalTime = new Date(arr1.getTime());
-        this.departureAirport = jfk;
-        this.arrivalAirport = lax;
-        this.duration = s;
-        this.price = v;
-    }
+    private String origin;
 
-    public String getId() {
+    private String destination;
+
+    private Timestamp departureTime;
+
+    private Timestamp arrivalTime;
+    private Timestamp date;
+
+    private boolean transit;
+
+    private Long airplaneId;
+
+    // Seats per class
+    private int economySeats;
+    private int businessSeats;
+    private int firstClassSeats;
+
+    // Seats booked per class
+    private int economyBooked = 0;
+    private int businessBooked = 0;
+    private int firstClassBooked = 0;
+
+    public Flight() {}
+
+    // === Getters and Setters === //
+
+    public Long getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getAirline() {
-        return airline;
-    }
-
-    public void setAirline(String airline) {
-        this.airline = airline;
     }
 
     public String getFlightNumber() {
@@ -54,51 +58,129 @@ public class Flight {
         this.flightNumber = flightNumber;
     }
 
-    public Date getDepartureTime() {
-        return departureTime;
+    public String getOrigin() {
+        return origin;
     }
 
-    public void setDepartureTime(Date departureTime) {
-        this.departureTime = departureTime;
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
-    public Date getArrivalTime() {
-        return arrivalTime;
+    public String getDestination() {
+        return destination;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
-        this.arrivalTime = arrivalTime;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
-    public String getDepartureAirport() {
-        return departureAirport;
+    public LocalDateTime getDepartureTime() {
+        return departureTime.toLocalDateTime();
     }
 
-    public void setDepartureAirport(String departureAirport) {
-        this.departureAirport = departureAirport;
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = java.sql.Timestamp.valueOf(departureTime);
     }
 
-    public String getArrivalAirport() {
-        return arrivalAirport;
+    public LocalDateTime getArrivalTime() {
+        return arrivalTime.toLocalDateTime();
     }
 
-    public void setArrivalAirport(String arrivalAirport) {
-        this.arrivalAirport = arrivalAirport;
+    public void setArrivalTime(LocalDateTime arrivalTime) {
+        this.arrivalTime = java.sql.Timestamp.valueOf(arrivalTime);
     }
 
-    public String getDuration() {
-        return duration;
+    public boolean isTransit() {
+        return transit;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setTransit(boolean transit) {
+        this.transit = transit;
     }
 
-    public double getPrice() {
-        return price;
+    public Long getAirplaneId() {
+        return airplaneId;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setAirplaneId(Long airplaneId) {
+        this.airplaneId = airplaneId;
+    }
+
+    public int getEconomySeats() {
+        return economySeats;
+    }
+
+    public void setEconomySeats(int economySeats) {
+        this.economySeats = economySeats;
+    }
+
+    public int getBusinessSeats() {
+        return businessSeats;
+    }
+
+    public void setBusinessSeats(int businessSeats) {
+        this.businessSeats = businessSeats;
+    }
+
+    public int getFirstClassSeats() {
+        return firstClassSeats;
+    }
+
+    public void setFirstClassSeats(int firstClassSeats) {
+        this.firstClassSeats = firstClassSeats;
+    }
+
+    public int getEconomyBooked() {
+        return economyBooked;
+    }
+
+    public void setEconomyBooked(int economyBooked) {
+        this.economyBooked = economyBooked;
+    }
+
+    public int getBusinessBooked() {
+        return businessBooked;
+    }
+
+    public void setBusinessBooked(int businessBooked) {
+        this.businessBooked = businessBooked;
+    }
+
+    public int getFirstClassBooked() {
+        return firstClassBooked;
+    }
+
+    public void setFirstClassBooked(int firstClassBooked) {
+        this.firstClassBooked = firstClassBooked;
+    }
+
+    // === Business Logic === //
+
+    public boolean isSeatAvailable(FlightClass flightClass) {
+        return switch (flightClass) {
+            case ECONOMY -> economyBooked < economySeats;
+            case BUSINESS -> businessBooked < businessSeats;
+            case FIRST -> firstClassBooked < firstClassSeats;
+        };
+    }
+
+    public void bookSeat(FlightClass flightClass) {
+        switch (flightClass) {
+            case ECONOMY -> {
+                if (economyBooked < economySeats) economyBooked++;
+            }
+            case BUSINESS -> {
+                if (businessBooked < businessSeats) businessBooked++;
+            }
+            case FIRST -> {
+                if (firstClassBooked < firstClassSeats) firstClassBooked++;
+            }
+        }
+    }
+    public LocalDateTime getDate() {
+        return date.toLocalDateTime();
+    }
+    public void setDate(LocalDateTime date) {
+        this.date = java.sql.Timestamp.valueOf(date);;
     }
 }

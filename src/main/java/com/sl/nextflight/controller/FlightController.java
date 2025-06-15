@@ -1,6 +1,8 @@
 package com.sl.nextflight.controller;
 
+import com.sl.nextflight.dto.FlightSearchResult;
 import com.sl.nextflight.entity.Flight;
+import com.sl.nextflight.model.FlightClass;
 import com.sl.nextflight.service.FlightService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -20,26 +23,23 @@ public class FlightController {
         this.flightsService = flightsService;
     }
 
+
     @GetMapping("/searchFlights")
     public String searchFlights(
-            @RequestParam String fromCity,
-            @RequestParam String toCity,
-            @RequestParam("departureDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate,
-//            @RequestParam(required = false) String returnDate,
-//            @RequestParam(defaultValue = "1") int passengers,
+            @RequestParam String origin,
+            @RequestParam String destination,
+            @RequestParam(required = false) LocalDateTime departureDate,
+            @RequestParam(defaultValue = "ECONOMY") FlightClass classType,
             Model model) {
 
+        List<Flight> results = flightsService.searchDirectFlights(origin, destination, departureDate, classType);
+        if (results.isEmpty()) {
+            model.addAttribute("message", "No flights found for the selected criteria.");
+        } else {
+            model.addAttribute("flights", results);
+        }
 
-        List<Flight> flights = flightsService.getAvailableFlights();
-
-        model.addAttribute("flightList", flights);
-        model.addAttribute("from", fromCity);
-        model.addAttribute("to", toCity);
-        model.addAttribute("departureDate", departureDate);
-//        model.addAttribute("returnDate", returnDate);
-//        model.addAttribute("passengers", passengers);
-
-        return "flight-results";
+        return "search-flights"; // maps to search-flights.jsp
     }
 
 }

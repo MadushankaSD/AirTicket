@@ -1,3 +1,28 @@
 spring:
   application:
     name: NextFlight
+
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/air_ticket_system?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update  # use 'create' for auto-creating schema each time, 'update' to keep changes
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  # Optional: logging
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+  main:
+    allow-bean-definition-overriding: true

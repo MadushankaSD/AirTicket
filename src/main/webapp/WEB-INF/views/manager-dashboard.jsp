@@ -11,97 +11,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manager Dashboard - Air Ticket System</title>
+    <title>Operator Dashboard - Next Flight</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
-            background-color: #eef2f5;
         }
         header {
-            background-color: #2a3f54;
+            background-color: #1f2d3d;
             color: white;
             padding: 20px;
             text-align: center;
         }
-        .container {
-            max-width: 1100px;
+        .dashboard-container {
+            max-width: 1200px;
             margin: 40px auto;
             padding: 20px;
         }
+        h2 {
+            color: #1f2d3d;
+        }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
         .card {
-            background: white;
+            background-color: white;
+            border-radius: 10px;
             padding: 20px;
-            border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
             text-align: center;
         }
-        .card:hover {
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
-        }
         .card h3 {
-            margin-bottom: 10px;
+            margin-top: 0;
         }
         .card a {
             display: inline-block;
             margin-top: 10px;
-            padding: 8px 14px;
-            background-color: #4db8ff;
+            padding: 10px 16px;
+            background-color: #0077b6;
             color: white;
             border-radius: 6px;
             text-decoration: none;
         }
-        .logout {
-            float: right;
-            margin-top: -45px;
-            margin-right: 20px;
+        .card a:hover {
+            background-color: #005f8f;
         }
     </style>
 </head>
 <body>
 
-<jsp:include page="header.jsp" />
-<h1>Manager Dashboard</h1>
-<div class="container">
+<header>
+    <h1>NEXT <span>FLIGHT</span> – Operator Dashboard</h1>
+    <div style="margin-top:8px;">Welcome,&nbsp;<%= user.getName() %> |
+        <a href="<%= request.getContextPath() %>/home" style="color:white; text-decoration:none;">Home</a>
+        |
+        <a href="<%= request.getContextPath() %>/logout" style="color:#ed856d; text-decoration:none;">Logout</a>
+    </div>
+
+</header>
+<div class="dashboard-container">
+    <h2>Customer & Operator Functions</h2>
     <div class="grid">
         <div class="card">
+            <h3>Search Flights</h3>
+            <p>Find direct and transit flights with available seats.</p>
+            <a href="<%= request.getContextPath() %>/flights/search">Search</a>
+        </div>
+        <div class="card">
+            <h3>My Bookings</h3>
+            <p>View your personal bookings and details.</p>
+            <a href="<%= request.getContextPath() %>/user/bookings">View</a>
+        </div>
+        <div class="card">
             <h3>Create Booking</h3>
-            <p>Create booking for customer.</p>
-            <a href="<%= request.getContextPath() %>/manager/booking">Book</a>
+            <p>Book flights on behalf of customers.</p>
+            <a href="<%= request.getContextPath() %>/operator/bookings/new">Create</a>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 40px;">Flight & Operations Management</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Flight Scheduling</h3>
+            <p>Schedule flights and validate against conflicts.</p>
+            <a href="<%= request.getContextPath() %>/operator/flights/schedule">Schedule</a>
         </div>
         <div class="card">
-            <h3>Flight Schedule</h3>
-            <p>Monitor all scheduled flights and routes.</p>
-            <a href="<%= request.getContextPath() %>/manager/flights">View</a>
+            <h3>Manage Airplanes</h3>
+            <p>Maintain airplane and airport records.</p>
+            <a href="<%= request.getContextPath() %>/operator/airplanes">Manage</a>
         </div>
         <div class="card">
-            <h3>Manage Airplane</h3>
-            <p>Check and manage assigned flight crews.</p>
-            <a href="<%= request.getContextPath() %>/manager/crew">Manage</a>
+            <h3>Passenger Manifest</h3>
+            <p>Generate seat list for any scheduled flight.</p>
+            <a href="<%= request.getContextPath() %>/operator/reports/manifest">Generate</a>
         </div>
         <div class="card">
-            <h3>Booking Status</h3>
-            <p>Track real-time seat bookings and availability.</p>
-            <a href="<%= request.getContextPath() %>/manager/bookings">Track</a>
+            <h3>Retrieve Bookings</h3>
+            <p>Find bookings by ID or customer details.</p>
+            <a href="<%= request.getContextPath() %>/operator/bookings/search">Retrieve</a>
         </div>
         <div class="card">
-            <h3>Operational Reports</h3>
-            <p>Access daily or weekly flight operation reports.</p>
-            <a href="<%= request.getContextPath() %>/manager/reports">Access</a>
-        </div>
-        <div class="card">
-            <h3>Staff Communication</h3>
-            <p>Send updates or messages to staff and crew.</p>
-            <a href="<%= request.getContextPath() %>/manager/messages">Open</a>
+            <h3>Flight Reports</h3>
+            <p>List arriving and departing flights by airport & timeframe.</p>
+            <a href="<%= request.getContextPath() %>/operator/reports/traffic">View</a>
         </div>
     </div>
 </div>
+
 </body>
 </html>
