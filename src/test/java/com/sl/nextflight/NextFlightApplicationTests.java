@@ -9,5 +9,4 @@ class NextFlightApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

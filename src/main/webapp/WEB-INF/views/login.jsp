@@ -60,18 +60,40 @@
 
 <script>
 
+    async function logout(event){
+        event.preventDefault();
+        try {
+            const response = await fetch("${pageContext.request.contextPath}/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                window.location.href = "${pageContext.request.contextPath}/home";
+            } else {
+                errorDiv.innerText = result.message;
+            }
+        } catch (e) {
+            console.error("Login error", e);
+            document.getElementById("errorDiv").innerText = result.message;
+        }
+
+    }
+
     function openLoginModal(event) {
         event.preventDefault();
         document.getElementById('loginModal').style.display = 'block';
     }
 
     function closeLoginModal() {
-        event.preventDefault();
         document.getElementById('loginModal').style.display = 'none';
     }
 
     function togglePassword() {
-        event.preventDefault();
         const pwInput = document.getElementById('modalPassword');
         pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
     }

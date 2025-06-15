@@ -1,9 +1,9 @@
 package com.sl.nextflight.controller;
 
+import com.sl.nextflight.model.User;
 import com.sl.nextflight.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +20,17 @@ public class LoginController {
         this.authService = authService;
     }
 
+    @PostMapping("/logout")
+    @ResponseBody
+    public Map<String, Object> logout(HttpSession session) {
+        session.invalidate();
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Logged out successfully");
+        return response;
+    }
+
+
     @PostMapping("/login")
     @ResponseBody
     public Map<String, Object> login(@RequestParam String username,
@@ -30,10 +41,11 @@ public class LoginController {
         // Check lock
         Long lockTime = (Long) session.getAttribute("lockTime");
         if (lockTime != null ) {
-            Long duration = (Long) session.getAttribute("duration");
-            if(duration != null && System.currentTimeMillis() - lockTime < duration) {
+            Integer duration = (int) session.getAttribute("duration");
+            if(System.currentTimeMillis() - lockTime < duration) {
+                long l = duration - (System.currentTimeMillis() - lockTime);
                 response.put("success", false);
-                response.put("message", "Account is locked. Try again in 30 seconds.");
+                response.put("message", "Account is locked. Try again in "+ l/1000 +" seconds.");
                 return response;
             }
         }
@@ -41,8 +53,14 @@ public class LoginController {
         boolean isValid = authService.validate(username, password);
 
         if (isValid) {
+            User user = new User();
+            user.setRole("ADMIN");
+            user.setUsername(username);
+            user.setName("Madushanka");
+
             session.removeAttribute("loginAttempts");
             session.removeAttribute("lockTime");
+            session.setAttribute("user",user);
             response.put("success", true);
         } else {
             Integer attempts = (Integer) session.getAttribute("loginAttempts");
