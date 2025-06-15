@@ -1,11 +1,14 @@
 package com.sl.nextflight.controller;
 
-import com.sl.nextflight.model.User;
+import com.sl.nextflight.model.UserDto;
 import com.sl.nextflight.service.AuthService;
+import com.sl.nextflight.service.impl.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,13 +18,15 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
-public class LoginController {
+public class AuthController {
 
+    @Autowired
+    private UserService userService;
     private final AuthService authService;
     private final Map<String, String> tokenStore = new ConcurrentHashMap<>();
 
 
-    public LoginController(AuthService authService) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -54,20 +59,11 @@ public class LoginController {
                 return response;
             }
         }
-
-        boolean isValid = authService.validate(username, password);
-
-        if (isValid) {
+        UserDto user = authService.validate(username, password);
+        if (user.getValid()) {
             String token = UUID.randomUUID().toString();
             tokenStore.put(token, username);
             session.setAttribute("authToken", token); // Store in session
-            User user = new User();
-            user.setRole("MANAGER");
-//            user.setRole("USER");
-//            user.setRole("ADMIN");
-            user.setUsername(username);
-            user.setName("Madushanka");
-
             session.removeAttribute("loginAttempts");
             session.removeAttribute("lockTime");
             session.setAttribute("user",user);
@@ -105,6 +101,13 @@ public class LoginController {
         }
 
         return response;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody UserDto user) {
+        // You should add validation & check if username/email already exists
+        boolean b = userService.registerUser(user);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     public boolean isValidToken(HttpSession session) {

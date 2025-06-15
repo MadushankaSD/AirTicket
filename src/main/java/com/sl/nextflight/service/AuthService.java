@@ -1,8 +1,9 @@
 package com.sl.nextflight.service;
 
+import com.sl.nextflight.model.UserDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface AuthService {
-    boolean validate(String username,String password);
+    UserDto validate(String username, String password);
 }

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page session="true" %>
-<%@ page import="com.sl.nextflight.model.User" %>
+<%@ page import="com.sl.nextflight.model.UserDto" %>
 <%
-    User user = (User) session.getAttribute("user");
+    UserDto user = (UserDto) session.getAttribute("user");
     if (user == null) {
         response.sendRedirect(request.getContextPath() + "/login.jsp");
         return;
@@ -65,7 +65,7 @@
 
 <div class="dashboard-container">
     <h1>User Dashboard</h1>
-    <h2>Welcome, <%= user.getName() %>!</h2>
+    <h2>Welcome, <%= user.getUsername() %>!</h2>
 
     <div class="actions">
         <a href="${pageContext.request.contextPath}/searchFlights">🔍 Search Flights</a>

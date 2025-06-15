@@ -1,16 +1,40 @@
 package com.sl.nextflight.service.impl;
 
+import com.sl.nextflight.entity.User;
+import com.sl.nextflight.model.UserDto;
+import com.sl.nextflight.repository.UserRepository;
 import com.sl.nextflight.service.AuthService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
     @Override
-    public boolean validate(String username, String password) {
-        return true;
+    public UserDto validate(String username, String password) {
+    Optional<User> byUsername = userRepository.findByUsername(username);
+    if (byUsername.isEmpty()) {
+        UserDto userDto = new UserDto();
+        userDto.setValid(false);
+        return userDto;
+    }
+        User user = byUsername.get();
+        UserDto userDto = new UserDto();
+        userDto.setValid(passwordEncoder.matches(password, user.getPassword()));
+        userDto.setUsername(user.getUsername());
+        userDto.setRole(user.getRoles().getName());
+
+        return userDto;
     }
 }

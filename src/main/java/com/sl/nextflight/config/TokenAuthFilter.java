@@ -1,11 +1,10 @@
 package com.sl.nextflight.config;
 
-import com.sl.nextflight.controller.LoginController;
+import com.sl.nextflight.controller.AuthController;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -16,9 +15,9 @@ import java.util.Set;
 public class TokenAuthFilter implements Filter {
 
 
-    private final LoginController authController;
+    private final AuthController authController;
 
-    public TokenAuthFilter(LoginController authController) {
+    public TokenAuthFilter(AuthController authController) {
         this.authController = authController;
     }
 

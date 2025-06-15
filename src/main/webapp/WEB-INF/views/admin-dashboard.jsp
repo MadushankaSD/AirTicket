@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="true" %>
-<%@ page import="com.sl.nextflight.model.User" %>
+<%@ page import="com.sl.nextflight.model.UserDto" %>
 <%
-    User user = (User) session.getAttribute("user");
+    UserDto user = (UserDto) session.getAttribute("user");
     if (user == null || !"ADMIN".equals(user.getRole())) {
         response.sendRedirect(request.getContextPath() + "/login");
         return;
@@ -34,7 +34,7 @@
 
 <header>
     <h1>NEXT <span>FLIGHT</span> – Administrator Dashboard</h1>
-    <div style="margin-top:8px;">Welcome,&nbsp;<%= user.getName() %> |
+    <div style="margin-top:8px;">Welcome,&nbsp;<%= user.getUsername() %> |
         <a href="<%= request.getContextPath() %>/home" style="color:white; text-decoration:none;">Home</a>
         |
         <a href="<%= request.getContextPath() %>/logout" style="color:#ed856d; text-decoration:none;">Logout</a>
