@@ -21,32 +21,30 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private FlightService flightService;
 
     @GetMapping("/admin-dashboard")
-    public String adminHome(Model model) {
+    public String adminHome() {
         return "admin/admin-dashboard";
     }
 
     @GetMapping("/users-management")
     public String adminUserCreate(Model model) {
         List<User> allUsers = userService.getAll();
-        model.addAttribute("usersList",allUsers);
+        model.addAttribute("users",allUsers);
         return "admin/create-user";
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/users/save")
     public String createUser(
             @RequestParam String username,
             @RequestParam String email,
             @RequestParam String password,
-            @RequestParam String role,
+            @RequestParam String roleId,
             Model model) {
 
         try {
             UserDto userDto = new UserDto();
-            userDto.setRole(role);
+            userDto.setRole(roleId);
             userDto.setUsername(username);
             userDto.setEmail(email);
             userDto.setPassword(password);
@@ -61,7 +59,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/search")
+    @GetMapping("/users/search")
     public String searchUsers(@RequestParam String keyword, Model model) {
         model.addAttribute("users", userService.search(keyword));
         return "redirect:/admin/users-management";
