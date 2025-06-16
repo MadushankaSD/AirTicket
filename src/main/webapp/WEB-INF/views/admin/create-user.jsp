@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="com.sl.nextflight.entity.User" %>
 
 <!DOCTYPE html>
 <html>
@@ -15,7 +14,7 @@
     </script>
 </head>
 <body>
-
+<jsp:include page="../common/header.jsp" />
 <div class="container mt-5">
     <h2 class="text-center mb-4">User Management</h2>
 
