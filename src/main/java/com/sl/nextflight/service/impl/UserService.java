@@ -78,6 +78,14 @@ public class UserService {
         }
     }
 
+    public boolean disableUser(Long userId){
+        userRepository.findById(userId).ifPresent(user -> {
+            user.setEnabled(!user.isEnabled());
+            userRepository.save(user);
+        });
+        return true;
+    }
+
     public User saveUser(User user){
        return userRepository.save(user);
     }

@@ -77,4 +77,10 @@ public class AdminController {
         return "/admin/operational-reports";
     }
 
+    @GetMapping("/user/desabled")
+    public boolean desableUser(@RequestParam Long userId){
+        return userService.disableUser(userId);
+    }
+
+
 }

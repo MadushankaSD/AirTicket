@@ -103,10 +103,10 @@
                     <form action="${pageContext.request.contextPath}/admin/users/toggle/${user.id}" method="post">
                         <c:choose>
                             <c:when test="${user.enabled}">
-                                <button type="submit" class="btn btn-sm btn-danger">Disable</button>
+                                <button class="btn btn-danger btn-sm" onclick="disableUser(${user.id})">Disable</button>
                             </c:when>
                             <c:otherwise>
-                                <button type="submit" class="btn btn-sm btn-success">Enable</button>
+                                <button class="btn btn-danger btn-sm" onclick="disableUser(${user.id})">Enable</button>
                             </c:otherwise>
                         </c:choose>
                     </form>
@@ -117,6 +117,26 @@
 
     </table>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function disableUser(userId) {
+        if (confirm("Are you sure you want to disable this user?")) {
+            $.ajax({
+                url: '${pageContext.request.contextPath}/admin/user/desabled',
+                type: 'GET',
+                data: { userId: userId },
+                success: function(response) {
+                    if (response === true || response === 'true') {
+                        alert("User disabled successfully.");
+                        location.reload();
+                    } else {
+                        alert("Failed to disable user.");
+                    }
+                }
+            });
+        }
+    }
+</script>
 
 </body>
 </html>
