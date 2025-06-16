@@ -24,6 +24,17 @@ public class    User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @ManyToOne(fetch = FetchType.EAGER) // or LAZY depending on your needs
     @JoinTable(
             name = "users_roles",

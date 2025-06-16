@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # use 'create' for auto-creating schema each time, 'update' to keep changes
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:

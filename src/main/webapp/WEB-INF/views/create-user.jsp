@@ -4,51 +4,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create User - Admin Panel</title>
+    <title>Manage Users - Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Create New User</h2>
+    <h2 class="text-center mb-4">User Management</h2>
 
-    <c:if test="${not empty error}">
-        <div class="alert alert-danger">${error}</div>
-    </c:if>
+    <form class="mb-4" method="get" action="${pageContext.request.contextPath}/admin/users/search">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" placeholder="Search by username or email..." value="${param.keyword}">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
+    <div class="mb-3 text-end">
+        <a href="${pageContext.request.contextPath}/admin/users/new" class="btn btn-success">+ Create User</a>
+    </div>
+
     <c:if test="${not empty success}">
         <div class="alert alert-success">${success}</div>
     </c:if>
 
-    <form action="${pageContext.request.contextPath}/admin/users/create" method="post">
-        <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="role" class="form-label">User Role</label>
-            <select class="form-select" id="role" name="role" required>
-                <option value="">-- Select Role --</option>
-                <option value="CUSTOMER">Customer</option>
-                <option value="OPERATOR">Operator</option>
-                <option value="ADMIN">Admin</option>
-            </select>
-        </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-success">Create User</button>
-        </div>
-    </form>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="user" items="${users}">
+            <tr>
+                <td>${user.id}</td>
+                <td>${user.username}</td>z
+                <td>${user.email}</td>
+                <td>
+                    <c:forEach var="role" items="${user.roles}">
+                        <span class="badge bg-primary">${role.name}</span>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:choose>
+                        <c:when test="${user.enabled}">Enabled</c:when>
+                        <c:otherwise>Disabled</c:otherwise>
+                    </c:choose>
+                </td>
+                <td>
+                    <a href="${pageContext.request.contextPath}/admin/users/edit/${user.id}" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="${pageContext.request.contextPath}/admin/users/toggle/${user.id}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm ${user.enabled ? 'btn-danger' : 'btn-success'}">
+                                ${user.enabled ? 'Disable' : 'Enable'}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 </body>

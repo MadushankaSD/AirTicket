@@ -76,18 +76,19 @@
         <div class="card">
             <h3>User Accounts</h3>
             <p>Create, update or deactivate users.</p>
-            <a href="<%= request.getContextPath() %>/admin/users">Manage</a>
+            <a href="<%= request.getContextPath() %>/admin/users-management">Manage</a>
         </div>
 
         <div class="card">
             <h3>Airplanes &amp; Airports</h3>
             <p>Maintain aircraft and airport master data.</p>
-            <a href="<%= request.getContextPath() %>/admin/aircraft">Maintain</a>
+            <a href="<%= request.getContextPath() %>/manage/aircraft">Maintain-Aircraft</a>
+            <a href="<%= request.getContextPath() %>/manage/airport">Maintain-Airport</a>
         </div>
         <div class="card">
             <h3>Flight Scheduling</h3>
             <p>Plan flights – auto‑checks plane location &amp; overlap.</p>
-            <a href="<%= request.getContextPath() %>/admin/flights/schedule">Schedule</a>
+            <a href="<%= request.getContextPath() %>/manage/flights">Schedule</a>
         </div>
 
         <div class="card">

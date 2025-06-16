@@ -3,10 +3,9 @@ package com.sl.nextflight.entity;
 import com.sl.nextflight.model.FlightClass;
 import jakarta.persistence.*;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
@@ -16,21 +15,23 @@ public class Flight {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "airplane_id") // Matches your DB column
+    private Airplane airplane;
 
-    private String flightNumber;
+    @ManyToOne
+    @JoinColumn(name = "origin_airport_id")
+    private Airport origin;
 
-    private String origin;
+    @ManyToOne
+    @JoinColumn(name = "destination_airport_id")
+    private Airport destination;
 
-    private String destination;
+    private LocalDateTime departureTime;
 
-    private Timestamp departureTime;
-
-    private Timestamp arrivalTime;
-    private Timestamp date;
-
+    private LocalDateTime arrivalTime;
+    private LocalDateTime date;
     private boolean transit;
-
-    private Long airplaneId;
 
     // Seats per class
     private int economySeats;
@@ -42,6 +43,20 @@ public class Flight {
     private int businessBooked = 0;
     private int firstClassBooked = 0;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public void setAirplane(Airplane airplane) {
+        this.airplane = airplane;
+    }
+
+
+
     public Flight() {}
 
     // === Getters and Setters === //
@@ -50,45 +65,16 @@ public class Flight {
         return id;
     }
 
-    public String getFlightNumber() {
-        return flightNumber;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
 
     public LocalDateTime getDepartureTime() {
-        return departureTime.toLocalDateTime();
-    }
-
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = java.sql.Timestamp.valueOf(departureTime);
+        return departureTime;
     }
 
     public LocalDateTime getArrivalTime() {
-        return arrivalTime.toLocalDateTime();
+        return arrivalTime;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
-        this.arrivalTime = java.sql.Timestamp.valueOf(arrivalTime);
-    }
+
 
     public boolean isTransit() {
         return transit;
@@ -96,14 +82,6 @@ public class Flight {
 
     public void setTransit(boolean transit) {
         this.transit = transit;
-    }
-
-    public Long getAirplaneId() {
-        return airplaneId;
-    }
-
-    public void setAirplaneId(Long airplaneId) {
-        this.airplaneId = airplaneId;
     }
 
     public int getEconomySeats() {
@@ -150,6 +128,30 @@ public class Flight {
         return firstClassBooked;
     }
 
+    public Airport getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Airport origin) {
+        this.origin = origin;
+    }
+
+    public Airport getDestination() {
+        return destination;
+    }
+
+    public void setDestination(Airport destination) {
+        this.destination = destination;
+    }
+
+    public void setDepartureTime(LocalDateTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public void setArrivalTime(LocalDateTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
     public void setFirstClassBooked(int firstClassBooked) {
         this.firstClassBooked = firstClassBooked;
     }
@@ -178,9 +180,9 @@ public class Flight {
         }
     }
     public LocalDateTime getDate() {
-        return date.toLocalDateTime();
+        return date;
     }
     public void setDate(LocalDateTime date) {
-        this.date = java.sql.Timestamp.valueOf(date);;
+        this.date = date;
     }
 }

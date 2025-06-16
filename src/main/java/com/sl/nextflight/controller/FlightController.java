@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -28,11 +30,16 @@ public class FlightController {
     public String searchFlights(
             @RequestParam String origin,
             @RequestParam String destination,
-            @RequestParam(required = false) LocalDateTime departureDate,
+            @RequestParam(required = false) String departureDate,
             @RequestParam(defaultValue = "ECONOMY") FlightClass classType,
             Model model) {
 
-        List<Flight> results = flightsService.searchDirectFlights(origin, destination, departureDate, classType);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(departureDate, formatter);
+        LocalTime time = LocalTime.MIDNIGHT; // 00:00
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+        List<Flight> results = flightsService.searchDirectFlights(origin, destination, dateTime, classType);
         if (results.isEmpty()) {
             model.addAttribute("message", "No flights found for the selected criteria.");
         } else {
@@ -40,6 +47,11 @@ public class FlightController {
         }
 
         return "search-flights"; // maps to search-flights.jsp
+    }
+
+    @GetMapping("/flights/search")
+    public String searchFlightsForm(Model model) {
+        return "search-flights";
     }
 
 }

@@ -7,6 +7,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css" />
     <title>Search Flights</title>
     <style>
         body {
@@ -53,28 +55,10 @@
     </style>
 </head>
 <body>
-
+<div class="wrap">
 <h1>Search Available Flights</h1>
 
-<form method="get" action="${pageContext.request.contextPath}/searchFlights">
-    <label for="origin">Origin:</label>
-    <input type="text" id="origin" name="origin" required>
-
-    <label for="destination">Destination:</label>
-    <input type="text" id="destination" name="destination" required>
-
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date" required>
-
-    <label for="travelClass">Class:</label>
-    <select name="travelClass" id="travelClass" required>
-        <option value="ECONOMY">Economy</option>
-        <option value="BUSINESS">Business</option>
-        <option value="FIRST">First</option>
-    </select>
-
-    <button type="submit">Search</button>
-</form>
+<jsp:include page="search-flight-form.jsp" />
 
 <%
     List<FlightSearchResult> results = (List<FlightSearchResult>) request.getAttribute("flights");
@@ -144,6 +128,6 @@
 <%
     }
 %>
-
+</div>
 </body>
 </html>
