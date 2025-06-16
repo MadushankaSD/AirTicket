@@ -20,5 +20,20 @@ public class ManagerController {
     public String newBooking(Model model) {
         return "admin/create-booking";
     }
+    @GetMapping("manage/bookings/search")
+    public String searchBooking(Model model) {
+        return "manager/retrieve-bookings";
+    }
+
+    @GetMapping("/operator/reports/traffic")
+    public String flightReport(Model model) {
+        return "manager/flight-reports";
+    }
+
+    @GetMapping("/operator/reports/manifest")
+    public String passengerManifest(Model model) {
+        return "manager/passenger-manifest";
+    }
+
 
 }

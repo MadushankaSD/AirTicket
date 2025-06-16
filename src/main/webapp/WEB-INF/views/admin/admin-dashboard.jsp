@@ -67,7 +67,7 @@
         <div class="card">
             <h3>Operational Reports</h3>
             <p>Revenue &amp; performance summaries.</p>
-            <a href="<%= request.getContextPath() %>/operator/reports/operations">Generate</a>
+            <a href="<%= request.getContextPath() %>/admin/reports/operations">Generate</a>
         </div>
     </div>
 
@@ -94,18 +94,18 @@
         <div class="card">
             <h3>Find Bookings</h3>
             <p>Search by booking ID or customer details.</p>
-            <a href="<%= request.getContextPath() %>/admin/bookings/search">Retrieve</a>
+            <a href="<%= request.getContextPath() %>/manage/bookings/search">Retrieve</a>
         </div>
         <div class="card">
             <h3>Passenger Manifest</h3>
             <p>Seat list for any scheduled flight.</p>
-            <a href="<%= request.getContextPath() %>/admin/reports/manifest">Generate</a>
+            <a href="<%= request.getContextPath() %>/operator/reports/manifest">Generate</a>
         </div>
 
         <div class="card">
             <h3>Traffic Reports</h3>
             <p>Arrivals / departures by airport &amp; date range.</p>
-            <a href="<%= request.getContextPath() %>/admin/reports/traffic">View</a>
+            <a href="<%= request.getContextPath() %>/operator/reports/traffic">View</a>
         </div>
     </div>
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -34,5 +35,15 @@ public class UserController {
     @GetMapping("/profile")
     public String showUserProfile() {
         return "user/user-profile";
+    }
+
+    @GetMapping("/searchBookings")
+    public String searchBookings(@RequestParam(required = false) Long bookingId,
+                                 @RequestParam(required = false) String customerName,
+                                 @RequestParam(required = false) String email,
+                                 Model model) {
+        List<Booking> bookings = bookingService.searchBookings(bookingId, customerName, email);
+        model.addAttribute("bookings", bookings);
+        return "manager/retrieve-bookings"; // Adjust based on your folder structure
     }
 }

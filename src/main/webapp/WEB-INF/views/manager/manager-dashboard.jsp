@@ -64,15 +64,7 @@
 </head>
 <body>
 
-<header>
-    <h1>NEXT <span>FLIGHT</span> – Operator Dashboard</h1>
-    <div style="margin-top:8px;">Welcome,&nbsp;<%= user.getUsername() %> |
-        <a href="<%= request.getContextPath() %>/home" style="color:white; text-decoration:none;">Home</a>
-        |
-        <a href="<%= request.getContextPath() %>/logout" style="color:#ed856d; text-decoration:none;">Logout</a>
-    </div>
-
-</header>
+<jsp:include page="../common/header.jsp" />
 <div class="dashboard-container">
     <h2>Customer & Operator Functions</h2>
     <div class="grid">
@@ -113,7 +105,7 @@
         <div class="card">
             <h3>Retrieve Bookings</h3>
             <p>Find bookings by ID or customer details.</p>
-            <a href="<%= request.getContextPath() %>/operator/bookings/search">Retrieve</a>
+            <a href="<%= request.getContextPath() %>/manage/bookings/search">Retrieve</a>
         </div>
         <div class="card">
             <h3>Flight Reports</h3>

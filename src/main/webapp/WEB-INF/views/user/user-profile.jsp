@@ -35,7 +35,7 @@
     <p class="text-muted">Update your personal details and preferences.</p>
 
     <% if (user != null) { %>
-    <form action="${pageContext.request.contextPath}/user/updateProfile" method="post">
+    <form id="profile">
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input type="text" class="form-control" name="name" value="<%= user.getUsername() %>" required>
@@ -46,7 +46,7 @@
             <input type="email" class="form-control" name="email" value="<%= user.getEmail() %>" required readonly>
         </div>
 
-        <button  class="btn btn-success">Update Profile</button>
+        <button type="submit" class="btn btn-success">Update Profile</button>
     </form>
     <% } else { %>
     <div class="alert alert-danger mt-4">User not found. Please log in</a>.</div>

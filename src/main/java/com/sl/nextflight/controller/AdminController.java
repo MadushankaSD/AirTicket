@@ -74,4 +74,9 @@ public class AdminController {
         return "redirect:/admin/users-management";
     }
 
+    @GetMapping("/reports/operations")
+    public String operationalReport(Model model) {
+        return "/admin/operational-reports";
+    }
+
 }
