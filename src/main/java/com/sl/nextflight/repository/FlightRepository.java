@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface FlightRepository extends JpaRepository<Flight,Long> {
 
-    List<Flight> findByOrigin_CodeAndDestination_CodeAndDate(String originId, String destinationId, Timestamp date);
+    List<Flight> findByOrigin_CodeAndDestination_CodeAndDate(String originId, String destinationId, LocalDateTime date);
     List<Flight> findByAirplaneId(Long airplaneId);
 
     List<Flight> findByDepartureTimeBetween(LocalDateTime start, LocalDateTime end);

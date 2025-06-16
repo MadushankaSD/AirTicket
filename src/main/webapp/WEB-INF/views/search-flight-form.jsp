@@ -1,24 +1,28 @@
+<!-- Search Form -->
 <div class="container search-box">
     <form action="${pageContext.request.contextPath}/searchFlights" method="get" class="row g-3">
+        <!-- Origin Dropdown -->
         <div class="col-md-3">
             <label for="origin" class="form-label">From</label>
             <select class="form-select" id="origin" name="origin" required>
                 <option value="">-- Select Departure City --</option>
-                <c:forEach var="city" items="${cities}">
-                    <option value="${city.name}">${city.name}</option>
+                <c:forEach var="city" items="${originCities}">
+                    <option value="${city}">${city}</option>
                 </c:forEach>
             </select>
         </div>
 
+        <!-- Destination Dropdown -->
         <div class="col-md-3">
             <label for="destination" class="form-label">To</label>
             <select class="form-select" id="destination" name="destination" required>
                 <option value="">-- Select Destination City --</option>
-                <c:forEach var="city" items="${cities}">
-                    <option value="${city.name}">${city.name}</option>
+                <c:forEach var="city" items="${destinationCities}">
+                    <option value="${city}">${city}</option>
                 </c:forEach>
             </select>
         </div>
+
 
         <div class="col-md-3">
             <label for="departureDate" class="form-label">Departure Date</label>

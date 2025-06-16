@@ -137,11 +137,8 @@ public class FlightServiceImpl implements FlightService {
 
     // 3. Get available direct flights by origin, destination, and class
     public List<Flight> searchDirectFlights(String origin, String destination, LocalDateTime date, FlightClass flightClass) {
-        java.sql.Timestamp sqlTimestamp = java.sql.Timestamp.valueOf(date);
 
-
-
-        return flightRepository.findByOrigin_CodeAndDestination_CodeAndDate(origin, destination, sqlTimestamp).stream()
+        return flightRepository.findByOrigin_CodeAndDestination_CodeAndDate(origin, destination, date).stream()
                 .filter(f -> !f.isTransit() && f.isSeatAvailable(flightClass))
                 .collect(Collectors.toList());
     }
