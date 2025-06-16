@@ -39,10 +39,10 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="user" items="${users}">
+        <c:forEach var="user" items="${usersList}">
             <tr>
                 <td>${user.id}</td>
-                <td>${user.username}</td>z
+                <td>${user.username}</td>
                 <td>${user.email}</td>
                 <td>
                     <c:forEach var="role" items="${user.roles}">

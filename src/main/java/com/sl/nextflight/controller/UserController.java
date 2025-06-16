@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UserController {
     @GetMapping("/user-dashboard")
     public String adminHome(Model model) {
-        return "user-dashboard";
+        return "user/user-dashboard";
     }
 }

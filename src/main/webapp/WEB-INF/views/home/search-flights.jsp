@@ -2,7 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.sl.nextflight.dto.FlightSearchResult" %>
 
-<jsp:include page="header.jsp" />
+<jsp:include page="../common/header.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -56,9 +56,8 @@
 </head>
 <body>
 <div class="wrap">
-<h1>Search Available Flights</h1>
 
-<jsp:include page="search-flight-form.jsp" />
+<jsp:include page="../common/search-flight-form.jsp" />
 
 <%
     List<FlightSearchResult> results = (List<FlightSearchResult>) request.getAttribute("flights");

@@ -4,7 +4,6 @@ import com.sl.nextflight.dto.FlightSearchResult;
 import com.sl.nextflight.entity.Flight;
 import com.sl.nextflight.model.FlightClass;
 import com.sl.nextflight.service.FlightService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,12 +45,12 @@ public class FlightController {
             model.addAttribute("flights", results);
         }
 
-        return "search-flights"; // maps to search-flights.jsp
+        return "home/search-flights"; // maps to search-flights.jsp
     }
 
     @GetMapping("/flights/search")
     public String searchFlightsForm(Model model) {
-        return "search-flights";
+        return "home/search-flights";
     }
 
 }

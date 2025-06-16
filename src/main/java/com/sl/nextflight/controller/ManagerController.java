@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ManagerController {
     @GetMapping("/manager-dashboard")
     public String managerHome(Model model) {
-        return "manager-dashboard";
+        return "manager/manager-dashboard";
     }
 }

@@ -61,7 +61,7 @@
 </head>
 <body>
 
-<jsp:include page="header.jsp" />
+<jsp:include page="../common/header.jsp" />
 
 <div class="dashboard-container">
     <h1>User Dashboard</h1>

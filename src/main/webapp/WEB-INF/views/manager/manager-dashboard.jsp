@@ -98,12 +98,12 @@
         <div class="card">
             <h3>Flight Scheduling</h3>
             <p>Schedule flights and validate against conflicts.</p>
-            <a href="<%= request.getContextPath() %>/operator/flights/schedule">Schedule</a>
+            <a href="<%= request.getContextPath() %>/manage/flights">Schedule</a>
         </div>
         <div class="card">
             <h3>Manage Airplanes</h3>
             <p>Maintain airplane and airport records.</p>
-            <a href="<%= request.getContextPath() %>/operator/airplanes">Manage</a>
+            <a href="<%= request.getContextPath() %>/manage/aircraft">Manage</a>
         </div>
         <div class="card">
             <h3>Passenger Manifest</h3>

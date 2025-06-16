@@ -43,7 +43,7 @@ public class FlightScheduleController {
         model.addAttribute("flights", flightService.findByOriginDestinationDate(originId, destinationId, date));
         model.addAttribute("airplanes", airplaneService.findAll());
         model.addAttribute("airports", airportService.findAll());
-        return "flight-schedule";
+        return "redirect:/manage/flights";
     }
 
     @GetMapping("/edit/{id}")
@@ -53,7 +53,7 @@ public class FlightScheduleController {
         model.addAttribute("flights", flightService.findAll());
         model.addAttribute("airplanes", airplaneService.findAll());
         model.addAttribute("airports", airportService.findAll());
-        return "flight-schedule";
+        return "redirect:/manage/flights";
     }
 
     @PostMapping("/create")

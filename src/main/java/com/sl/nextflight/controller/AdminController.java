@@ -1,17 +1,18 @@
 package com.sl.nextflight.controller;
 
+import com.sl.nextflight.entity.User;
 import com.sl.nextflight.model.UserDto;
 import com.sl.nextflight.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -19,15 +20,17 @@ public class AdminController {
 
     @GetMapping("/admin-dashboard")
     public String adminHome(Model model) {
-        return "admin-dashboard";
+        return "admin/admin-dashboard";
     }
 
-    @GetMapping("/admin/users-management")
+    @GetMapping("/users-management")
     public String adminUserCreate(Model model) {
-        return "create-user";
+        List<User> allUsers = userService.getAll();
+        model.addAttribute("usersList",allUsers);
+        return "admin/create-user";
     }
 
-    @PostMapping("/admin/users/create")
+    @PostMapping("/users/create")
     public String createUser(
             @RequestParam String username,
             @RequestParam String email,
@@ -48,26 +51,21 @@ public class AdminController {
             model.addAttribute("error", "Error creating user: " + e.getMessage());
         }
 
-        return "create-user"; // return to the same JSP with message
+        return "redirect:/admin/users-management"; // return to the same JSP with message
     }
 
-    @GetMapping("/admin/users")
-    public String listUsers(Model model) {
-        model.addAttribute("users", userService.getAll());
-        return "create-user";
-    }
 
-    @GetMapping("/admin/users/search")
+    @GetMapping("/search")
     public String searchUsers(@RequestParam String keyword, Model model) {
         model.addAttribute("users", userService.search(keyword));
-        return "create-user";
+        return "redirect:/admin/users-management";
     }
 
-    @PostMapping("/admin/users/toggle/{id}")
+    @PostMapping("/users/toggle/{id}")
     public String toggleUser(@PathVariable Long id, RedirectAttributes redirect) {
         userService.toggleEnabled(id);
         redirect.addFlashAttribute("success", "User status updated.");
-        return "redirect:/admin/users";
+        return "redirect:/admin/users-management";
     }
 
 

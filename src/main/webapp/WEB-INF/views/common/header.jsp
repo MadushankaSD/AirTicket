@@ -13,7 +13,7 @@
                 if (user != null) {
             %>
             <% if ("ADMIN".equals(user.getRole())) { %>
-            <a href="${pageContext.request.contextPath}/admin-dashboard">Admin Dashboard</a>
+            <a href="${pageContext.request.contextPath}/admin/admin-dashboard">Admin Dashboard</a>
             <% } %>
 
             <% if ("OPERATOR".equals(user.getRole())) { %>
