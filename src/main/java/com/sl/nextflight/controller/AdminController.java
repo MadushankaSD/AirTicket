@@ -1,8 +1,12 @@
 package com.sl.nextflight.controller;
 
+import com.sl.nextflight.dto.FlightSearchResult;
 import com.sl.nextflight.entity.User;
+import com.sl.nextflight.model.FlightClass;
 import com.sl.nextflight.model.UserDto;
+import com.sl.nextflight.service.FlightService;
 import com.sl.nextflight.service.impl.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +21,8 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private FlightService flightService;
 
     @GetMapping("/admin-dashboard")
     public String adminHome(Model model) {
@@ -67,7 +73,5 @@ public class AdminController {
         redirect.addFlashAttribute("success", "User status updated.");
         return "redirect:/admin/users-management";
     }
-
-
 
 }

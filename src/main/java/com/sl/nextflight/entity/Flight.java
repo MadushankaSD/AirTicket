@@ -4,6 +4,7 @@ import com.sl.nextflight.model.FlightClass;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -22,7 +23,6 @@ public class Flight {
     @ManyToOne
     @JoinColumn(name = "origin_airport_id")
     private Airport origin;
-
     @ManyToOne
     @JoinColumn(name = "destination_airport_id")
     private Airport destination;
@@ -30,7 +30,7 @@ public class Flight {
     private LocalDateTime departureTime;
 
     private LocalDateTime arrivalTime;
-    private LocalDateTime date;
+    private LocalDate date;
     private boolean transit;
 
     // Seats per class
@@ -166,23 +166,25 @@ public class Flight {
         };
     }
 
-    public void bookSeat(FlightClass flightClass) {
+    public void bookSeat(FlightClass flightClass,int count) {
         switch (flightClass) {
             case ECONOMY -> {
-                if (economyBooked < economySeats) economyBooked++;
+                if (economyBooked < economySeats) economyBooked+=count;
             }
             case BUSINESS -> {
-                if (businessBooked < businessSeats) businessBooked++;
+                if (businessBooked < businessSeats) businessBooked+=count;
             }
             case FIRST -> {
-                if (firstClassBooked < firstClassSeats) firstClassBooked++;
+                if (firstClassBooked < firstClassSeats) firstClassBooked+=count;
             }
         }
     }
-    public LocalDateTime getDate() {
+
+    public LocalDate getDate() {
         return date;
     }
-    public void setDate(LocalDateTime date) {
+
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

@@ -26,8 +26,8 @@
             <label for="origin" class="form-label">From</label>
             <select class="form-select" id="origin" name="origin" required>
                 <option value="">-- Select Departure City --</option>
-                <c:forEach var="city" items="${originCities}">
-                    <option value="${city}">${city}</option>
+                <c:forEach var="entry" items="${originCities}">
+                    <option value="${entry.value}">${entry.key}</option>
                 </c:forEach>
             </select>
         </div>
@@ -37,8 +37,8 @@
             <label for="destination" class="form-label">To</label>
             <select class="form-select" id="destination" name="destination" required>
                 <option value="">-- Select Destination City --</option>
-                <c:forEach var="city" items="${destinationCities}">
-                    <option value="${city}">${city}</option>
+                <c:forEach var="entry" items="${destinationCities}">
+                    <option value="${entry.value}">${entry.key}</option>
                 </c:forEach>
             </select>
         </div>

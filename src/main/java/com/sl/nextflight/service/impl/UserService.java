@@ -69,4 +69,17 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User findUserById(String userName , String email) {
+        Optional<User> user = userRepository.findByUsernameOrEmail(userName, email);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+           return null;
+        }
+    }
+
+    public User saveUser(User user){
+       return userRepository.save(user);
+    }
+
 }

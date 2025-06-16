@@ -1,11 +1,21 @@
 package com.sl.nextflight.service.impl;
 
+import com.sl.nextflight.dto.FlightSearchResult;
+import com.sl.nextflight.entity.Booking;
 import com.sl.nextflight.entity.Flight;
+import com.sl.nextflight.entity.Role;
+import com.sl.nextflight.entity.User;
 import com.sl.nextflight.model.FlightClass;
+import com.sl.nextflight.repository.BookingRepository;
 import com.sl.nextflight.repository.FlightRepository;
+import com.sl.nextflight.repository.RoleRepository;
 import com.sl.nextflight.service.FlightService;
+import com.sl.nextflight.service.utill.CommonUtil;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.cache.spi.support.CacheUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +32,14 @@ public class FlightServiceImpl implements FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CommonUtil commonUtil;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public Flight saveFlight(Flight flight) {
         return flightRepository.saveAndFlush(flight);
@@ -136,11 +154,13 @@ public class FlightServiceImpl implements FlightService {
     }
 
     // 3. Get available direct flights by origin, destination, and class
-    public List<Flight> searchDirectFlights(String origin, String destination, LocalDateTime date, FlightClass flightClass) {
+    public List<FlightSearchResult> searchDirectFlights(String origin, String destination, LocalDate date, FlightClass flightClass) {
 
-        return flightRepository.findByOrigin_CodeAndDestination_CodeAndDate(origin, destination, date).stream()
+        return flightRepository.findFlights(origin, destination, date).stream()
                 .filter(f -> !f.isTransit() && f.isSeatAvailable(flightClass))
+                .map(FlightServiceImpl::toDto)
                 .collect(Collectors.toList());
+
     }
 
     // 4. Get available transit flights (origin to connecting to destination)
@@ -162,18 +182,51 @@ public class FlightServiceImpl implements FlightService {
 //    }
 
     // 5. Book a seat
-    public boolean bookSeat(Long flightId, FlightClass flightClass) {
+    @Transactional
+    public boolean createBooking(Long flightId, HttpSession session, FlightClass flightClass, int seatCount, String passengerName, String email, String mobile){
+
         Optional<Flight> flightOpt = flightRepository.findById(flightId);
-        if (flightOpt.isPresent()) {
-            Flight flight = flightOpt.get();
-            if (flight.isSeatAvailable(flightClass)) {
-                flight.bookSeat(flightClass);
-                flightRepository.saveAndFlush(flight);
-                return true;
-            }
+        if (flightOpt.isEmpty()) {
+            return false;
         }
-        return false;
+        Flight flight = flightOpt.get();
+        if (!flight.isSeatAvailable(flightClass)) {
+            return false;
+        }
+        // Book the seat
+        flight.bookSeat(flightClass, seatCount);
+        flightRepository.save(flight);
+
+        Booking booking = new Booking();
+        Object user = session.getAttribute("user");
+        if(user instanceof User user2) {
+            booking.setUser(user2);
+        }else {
+            User userById = userService.findUserById(passengerName, email);
+            if(userById == null){
+                Role defaultRole = roleRepository.findByName("CUSTOMER").orElseThrow(() -> new RuntimeException("Default role CUSTOMER not found"));
+                User user1 = new User();
+                user1.setEmail(email);
+                user1.setRoles(defaultRole);
+                user1.setEnabled(true);
+                user1.setPassword(commonUtil.generatePassword(10));
+                user1.setUsername(passengerName);
+                userService.saveUser(user1);
+                booking.setUser(user1);
+            }
+            booking.setUser(userById);
+        }
+        booking.setFlight(flight);
+        booking.setTravelClass(flightClass);
+        booking.setSeatCount(seatCount);
+        booking.setPassengerName(passengerName);
+        booking.setEmail(email);
+        booking.setMobile(mobile);
+        booking.setBookingTime(LocalDateTime.now());
+        bookingRepository.save(booking);
+        return true;
     }
+
 
     // 6. Find flight by ID
     public Flight getFlightById(Long id) {
@@ -230,8 +283,50 @@ public class FlightServiceImpl implements FlightService {
         return false;
     }
 
+    @Override
+    public boolean cancelBookingById(Long bookingId) {
+        return false;
+    }
+
     private boolean timesOverlap(LocalDateTime start1, LocalDateTime end1,
                                  LocalDateTime start2, LocalDateTime end2) {
         return !(end1.isBefore(start2) || end2.isBefore(start1));
+    }
+
+
+    public static FlightSearchResult toDto(Flight flight) {
+        if (flight == null || flight.getAirplane() == null || flight.getOrigin() == null || flight.getDestination() == null) {
+            throw new IllegalArgumentException("Invalid flight data: airplane/origin/destination missing");
+        }
+
+        return new FlightSearchResult(
+                flight.getId(),
+                flight.getAirplane().getManufacturer(), // Assuming Airplane has Airline relationship
+                flight.getAirplane().getId().toString(),       // Or some flight number field
+                flight.getOrigin().getCity() + " (" + flight.getOrigin().getCode() + ")",
+                flight.getDestination().getCity() + " (" + flight.getDestination().getCode() + ")",
+                flight.getDepartureTime(),
+                flight.getArrivalTime(),
+                flight.getEconomySeats() - flight.getEconomyBooked(),
+                flight.getBusinessSeats() - flight.getBusinessBooked(),
+                flight.getFirstClassSeats() - flight.getFirstClassBooked(),
+                calculateEconomyPrice(flight),
+                calculateBusinessPrice(flight),
+                calculateFirstClassPrice(flight),
+                flight.isTransit()
+        );
+    }
+
+    private static double calculateEconomyPrice(Flight flight) {
+        // Add your dynamic or fixed pricing logic here
+        return 150.0; // Placeholder
+    }
+
+    private static double calculateBusinessPrice(Flight flight) {
+        return 300.0; // Placeholder
+    }
+
+    private static double calculateFirstClassPrice(Flight flight) {
+        return 500.0; // Placeholder
     }
 }

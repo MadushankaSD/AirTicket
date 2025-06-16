@@ -59,7 +59,7 @@ public class AuthController {
                 return response;
             }
         }
-        UserDto user = authService.validate(username, password);
+        UserDto user = authService.validate(username, password,session);
         if (user.getValid()) {
             String token = UUID.randomUUID().toString();
             tokenStore.put(token, username);
@@ -67,6 +67,7 @@ public class AuthController {
             session.removeAttribute("loginAttempts");
             session.removeAttribute("lockTime");
             session.setAttribute("user",user);
+
             response.put("success", true);
         } else {
             Integer attempts = (Integer) session.getAttribute("loginAttempts");

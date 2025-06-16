@@ -53,7 +53,7 @@
         <div class="card">
             <h3>My Bookings</h3>
             <p>View, cancel or print your own reservations.</p>
-            <a href="<%= request.getContextPath() %>/user/bookings">View</a>
+            <a href="<%= request.getContextPath() %>/my-bookings">View</a>
         </div>
     </div>
 

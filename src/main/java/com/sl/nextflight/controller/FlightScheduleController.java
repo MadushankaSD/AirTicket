@@ -77,7 +77,7 @@ public class FlightScheduleController {
         flight.setAirplane(airplaneService.findById(airplaneId));
         flight.setOrigin(airportService.findById(originId));
         flight.setDestination(airportService.findById(destinationId));
-        flight.setDate(depDateTime);
+        flight.setDate(depDateTime.toLocalDate());
         flight.setDepartureTime(depDateTime);
         flight.setArrivalTime(arrDateTime);
         flight.setTransit(transit);
@@ -117,7 +117,7 @@ public class FlightScheduleController {
         flight.setAirplane(airplaneService.findById(airplaneId));
         flight.setOrigin(airportService.findById(originId));
         flight.setDestination(airportService.findById(destinationId));
-        flight.setDate(depDateTime);
+        flight.setDate(depDateTime.toLocalDate());
         flight.setDepartureTime(depDateTime);
         flight.setArrivalTime(arrDateTime);
         flight.setTransit(transit);

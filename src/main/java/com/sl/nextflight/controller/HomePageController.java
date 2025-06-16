@@ -1,5 +1,6 @@
 package com.sl.nextflight.controller;
 
+import com.sl.nextflight.entity.Airport;
 import com.sl.nextflight.entity.City;
 import com.sl.nextflight.entity.Flight;
 import com.sl.nextflight.service.CityService;
@@ -22,18 +23,27 @@ public class HomePageController {
     @GetMapping(value = {"/home", "/"})
     public String home(Model model) {
         List<Flight> flights = flightService.findAll();
-
         // Extract distinct origin city names
-        Set<String> originCities = flights.stream()
-                .map(flight -> flight.getOrigin().getCity())
-                .filter(city -> city != null && !city.isEmpty())
-                .collect(Collectors.toCollection(TreeSet::new));  // TreeSet sorts the city names
+        Map<String, String> originCities = flights.stream()
+                .map(Flight::getOrigin)
+                .filter(airport -> airport.getCity() != null && airport.getCode() != null)
+                .collect(Collectors.toMap(
+                        Airport::getCity,
+                        Airport::getCode,
+                        (existing, replacement) -> existing, // handle duplicates
+                        TreeMap::new // keep it sorted by city
+                )); // TreeSet sorts the city names
 
-        // Extract distinct destination city names
-        Set<String> destinationCities = flights.stream()
-                .map(flight -> flight.getDestination().getCity())
-                .filter(city -> city != null && !city.isEmpty())
-                .collect(Collectors.toCollection(TreeSet::new));
+        Map<String, String> destinationCities = flights.stream()
+                .map(Flight::getDestination)
+                .filter(airport -> airport.getCity() != null && airport.getCode() != null)
+                .collect(Collectors.toMap(
+                        Airport::getCity,
+                        Airport::getCode,
+                        (existing, replacement) -> existing, // handle duplicates
+                        TreeMap::new // keep it sorted by city
+                ));
+
 
         model.addAttribute("originCities", originCities);
         model.addAttribute("destinationCities", destinationCities);

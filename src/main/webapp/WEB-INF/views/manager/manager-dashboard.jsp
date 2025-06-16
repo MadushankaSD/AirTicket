@@ -84,7 +84,7 @@
         <div class="card">
             <h3>My Bookings</h3>
             <p>View your personal bookings and details.</p>
-            <a href="<%= request.getContextPath() %>/user/bookings">View</a>
+            <a href="<%= request.getContextPath() %>/my-bookings">View</a>
         </div>
         <div class="card">
             <h3>Create Booking</h3>

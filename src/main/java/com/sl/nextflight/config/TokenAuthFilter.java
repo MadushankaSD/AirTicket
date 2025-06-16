@@ -36,6 +36,7 @@ public class TokenAuthFilter implements Filter {
                 contextPath + "/home",
                 contextPath + "/login",
                 contextPath + "/logout",
+                contextPath + "/booking",
                 contextPath + "/searchFlights"
         );
 
